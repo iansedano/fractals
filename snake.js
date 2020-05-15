@@ -1,37 +1,62 @@
+
+class Point {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+}
+
+class SnakeSegment {
+  constructor(point1, point2, angle) {
+    this.x1 = point1.x
+    this.y1 = point1.y
+    this.x2 = point2.x
+    this.y2 = point2.y
+    this.angle
+  }
+}
+
+
+
 pi = 3.14159;
 snake_length = 10;
 max_angle = pi / 2;
 min_angle = pi / 8;
 start_angle = -pi/4
-start_x = 50
-start_y = 50
+start = new Point(50, 50)
+//start.x = 50
+//start.y = 50
 min_length = 50;
 max_length = 100;
 snake_core = []
 
 iterations = 3
 
+
+
+
 function setup() {
   createCanvas(500, 500);
   for (var i = 0; i < snake_length; i++) {
 
     
-    possible_line = new_line(start_x, start_y)
+    end_point = new_line_end(start)
 
     while (
-      possible_line[0] < 50 ||
-      possible_line[0] > width - 50 ||
-      possible_line[1] < 50 ||
-      possible_line[1] > height - 50
+      end_point.x < 50 ||
+      end_point.x > width - 50 ||
+      end_point.y < 50 ||
+      end_point.y > height - 50
       ) {
-      possible_line = new_line(start_x, start_y)
+      end_point = new_line_end(start)
     }
 
 
-    line(start_x, start_y, new_x, new_y);
-    snake_core.push([start_x, start_y, new_x, new_y])
-    start_x = new_x;
-    start_y = new_y;
+    line(start.x, start.y, end_point.x, end_point.y);
+
+    snake_core.push(new SnakeSegment(start, end_point, start_angle))
+
+    start = new Point(end_point.x, end_point.y)
     start_angle = line_angle
 
 
@@ -40,33 +65,31 @@ function setup() {
 
   for (var i = 0; i < snake_core.length; i++){
     mid_point = get_mid_point(snake_core[i])
-    circle(mid_point[0], mid_point[1], 5)
+    circle(mid_point.x, mid_point.y, 5)
   }
 }
 
 
 
 
-function new_line(start_x, start_y) {
+function new_line_end(aPoint) {
 
     angle_to_add = random(min_angle, max_angle) * random([-1, 1]);
     line_angle = start_angle + angle_to_add
-    console.log(line_angle);
 
     line_length = random(min_length, max_length);
     x_to_add = line_length * cos(line_angle);
     y_to_add = line_length * sin(line_angle);
-    new_x = start_x + x_to_add;
-    new_y = start_y + y_to_add;
+    end_point = new Point(aPoint.x + x_to_add, aPoint.y + y_to_add);
 
-    return [new_x, new_y];
+    return end_point;
 }
 
-function get_mid_point(line_array) {
-  mid_x = (line_array[2] + line_array[0]) / 2;
-  mid_y = (line_array[3] + line_array[1]) / 2;
+function get_mid_point(segment) {
+  mid_x = (segment.x1 + segment.x2) / 2;
+  mid_y = (segment.y1 + segment.y2) / 2;
 
-  return [mid_x, mid_y]
+  return new Point(mid_x, mid_y)
 }
 
 
