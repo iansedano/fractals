@@ -1,5 +1,5 @@
 pi = 3.14159;
-snake_length = 6;
+snake_length = 10;
 max_angle = pi / 2;
 min_angle = pi / 8;
 start_angle = -pi/4
@@ -7,9 +7,12 @@ start_x = 50
 start_y = 50
 min_length = 50;
 max_length = 100;
+snake_core = []
+
+iterations = 3
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(500, 500);
   for (var i = 0; i < snake_length; i++) {
 
     
@@ -24,13 +27,24 @@ function setup() {
       possible_line = new_line(start_x, start_y)
     }
 
-    line(start_x, start_y, new_x, new_y);
 
+    line(start_x, start_y, new_x, new_y);
+    snake_core.push([start_x, start_y, new_x, new_y])
     start_x = new_x;
     start_y = new_y;
     start_angle = line_angle
+
+
+  }
+  console.log(snake_core)
+
+  for (var i = 0; i < snake_core.length; i++){
+    mid_point = get_mid_point(snake_core[i])
+    circle(mid_point[0], mid_point[1], 5)
   }
 }
+
+
 
 
 function new_line(start_x, start_y) {
@@ -47,6 +61,15 @@ function new_line(start_x, start_y) {
 
     return [new_x, new_y];
 }
+
+function get_mid_point(line_array) {
+  mid_x = (line_array[2] + line_array[0]) / 2;
+  mid_y = (line_array[3] + line_array[1]) / 2;
+
+  return [mid_x, mid_y]
+}
+
+
 /*
 function draw() {
   background(0);
