@@ -13,7 +13,13 @@ class SnakeSegment {
     this.x2 = point2.x
     this.y2 = point2.y
     this.angle
+    this.lx = this.x2 - this.x1
+    this.ly = this.y2 - this.y1
+
+    this.length = math.hypot(this.lx, this.ly)
   }
+
+
 }
 
 
@@ -29,6 +35,7 @@ start = new Point(50, 50)
 min_length = 50;
 max_length = 100;
 snake_core = []
+snake_fatness = 0.2 // in radians
 
 iterations = 3
 
@@ -66,9 +73,11 @@ function setup() {
   for (var i = 0; i < snake_core.length; i++){
     mid_point = get_mid_point(snake_core[i])
     circle(mid_point.x, mid_point.y, 5)
+
+    length_of_new_line = (snake_core[i].length / 2) / cos(snake_fatness)
+
   }
 }
-
 
 
 
@@ -92,7 +101,16 @@ function get_mid_point(segment) {
   return new Point(mid_x, mid_y)
 }
 
+//function draw_secondary_snake(snake_core, fatness, direction) {
+//  if (direction = "left") {
 
+//  } else if (direction = "right"){
+
+//  }
+
+
+
+}
 /*
 function draw() {
   background(0);
